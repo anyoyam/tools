@@ -30,10 +30,11 @@
     </style>
   </head>
   <body>
-    <p>生产日期：<input id="date" readonly/></p>
+    <p>生产日期：<input id="date" class="date" readonly/></p>
     <p>保质期天数：<input type="number" class="day1" /></p>
+    <p>保质月数：<input type="number" class="day3" /></p>
     <p>提前下架天数：<input type="number" class="day2" /></p>
-    <p><input type="button" value="日期计算" class="calc" /></p>
+    <p><input type="button" value="日期计算" class="calc" /> <input type="button" value="清空" class="clean" /></p>
     <p class="res"></p>
     <script src="./jquery-3.4.1.min.js"></script>
     <script src="./laydate/laydate.js"></script>
@@ -73,26 +74,36 @@
         var a = $("#date").val();
         var b = $(".day1").val().trim();
         var c = $(".day2").val().trim();
+        var r = $(".day3").val().trim();
+
         var d = /^\d+$/;
-        if (!a || !b || !c) {
-          alert("生产日期，保质期天数，提前下架天数都要填写哦～");
+        if (!a || (!b || !r) || !c) {
+          alert("生产日期，保质期天数/月数，提前下架天数都要填写哦～");
           return;
         }
-        if (!d.test(b) || !d.test(c)) {
-          alert("保质期天数和提前下架天数必须为数字哦～");
+        if (!d.test(b || r) || !d.test(c)) {
+          alert("保质期天数/月数和提前下架天数必须为数字哦～");
           return;
         }
         a = a.replace(/\-/g, "/");
         console.log(a);
         a = new Date(a);
         console.log(a.toGMTString());
-        a.setDate(a.getDate() + parseInt(b));
+        if (b) {
+          a.setDate(a.getDate() + parseInt(b));
+        }
+        if (r) {
+          a.setMonth(a.getMonth() + parseInt(r));
+        }
         console.log(a.toGMTString());
         var e = format(a, "yyyy-MM-dd");
         a.setDate(a.getDate() - parseInt(c));
         console.log(a.toGMTString());
         var f = format(a, "yyyy-MM-dd");
         $(".res").html("商品到期日期为<span class='blue'>" + e + "</span>，下架日期为<span class='red'>" + f + "</span>");
+      });
+      $(".clean").click(function() {
+        $(".day1, .day2, .day3, .date").val("");
       });
     </script>
   </body>

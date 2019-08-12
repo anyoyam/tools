@@ -77,7 +77,7 @@
         var r = $(".day3").val().trim();
 
         var d = /^\d+$/;
-        if (!a || (!b || !r) || !c) {
+        if (!a || (!b && !r) || !c) {
           alert("生产日期，保质期天数/月数，提前下架天数都要填写哦～");
           return;
         }
@@ -100,10 +100,11 @@
         a.setDate(a.getDate() - parseInt(c));
         console.log(a.toGMTString());
         var f = format(a, "yyyy-MM-dd");
-        $(".res").html("商品到期日期为<span class='blue'>" + e + "</span>，下架日期为<span class='red'>" + f + "</span>");
+        $(".res").html("商品到期日期为<span class='blue'>" + e + "</span><br/>下架日期为<span class='red'>" + f + "</span>");
       });
       $(".clean").click(function() {
         $(".day1, .day2, .day3, .date").val("");
+        $(".res").html("");
       });
     </script>
   </body>

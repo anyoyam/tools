@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>商品到期日期／下架日期计算器</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+      html {
+        font-size: 24px;
+      }
+      body {
+        font-size: .9rem;
+      }
+      input {
+        font-size: .9rem;
+        border: 1px solid #ccc;
+        outline: none;
+        box-shadow: none;
+        width: 5rem;
+      }
+      .day1, .day2 {
+        width: 4rem;
+      }
+      .blue {
+        color: blue;
+      }
+      .red {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <p>生产日期：<input id="date" readonly/></p>
+    <p>保质期天数：<input type="number" class="day1" /></p>
+    <p>提前下架天数：<input type="number" class="day2" /></p>
+    <p><input type="button" value="日期计算" class="calc" /></p>
+    <p class="res"></p>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="./laydate/laydate.js"></script>
+    <script>
+      laydate.render({
+        elem: '#date'
+      });
+      function format(date, format) {
+        var o = {
+          "M+": date.getMonth() + 1,
+          "d+": date.getDate(),
+          "h+": date.getHours(),
+          "m+": date.getMinutes(),
+          "s+": date.getSeconds(),
+          "q+": Math.floor((date.getMonth() + 3) / 3),
+          "S": date.getMilliseconds()
+        };
+        var w = [
+          ['日', '一', '二', '三', '四', '五', '六'],
+          ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+          ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+        ];
+        if (/(y+)/.test(format)) {
+          format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        if (/(w+)/.test(format)) {
+          format = format.replace(RegExp.$1, w[RegExp.$1.length - 1][date.getDay()]);
+        }
+        for (var k in o) {
+          if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+          }
+        }
+        return format;
+      }
+      $(".calc").click(function() {
+        var a = $("#date").val();
+        var b = $(".day1").val().trim();
+        var c = $(".day2").val().trim();
+        var d = /^\d+$/;
+        if (!a || !b || !c) {
+          alert("生产日期，保质期天数，提前下架天数都要填写哦～");
+          return;
+        }
+        if (!d.test(b) || !d.test(c)) {
+          alert("保质期天数和提前下架天数必须为数字哦～");
+          return;
+        }
+        a = a.replace(/\-/g, "/");
+        console.log(a);
+        a = new Date(a);
+        console.log(a.toGMTString());
+        a.setDate(a.getDate() + parseInt(b));
+        console.log(a.toGMTString());
+        var e = format(a, "yyyy-MM-dd");
+        a.setDate(a.getDate() - parseInt(c));
+        console.log(a.toGMTString());
+        var f = format(a, "yyyy-MM-dd");
+        $(".res").html("商品到期日期为<span class='blue'>" + e + "</span>，下架日期为<span class='red'>" + f + "</span>");
+      });
+    </script>
+  </body>
+</html>

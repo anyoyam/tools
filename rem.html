@@ -1,0 +1,79 @@
+<html>
+<head>
+	<style>
+		html {
+			font-size: 20px;
+		}
+		input {
+			width: 5em;
+			padding: 2px;
+			border: 0;
+			border-bottom: 2px solid #ccc;
+			outline: 0;
+		}
+		.result {
+			color: green;
+		}
+	</style>
+</head>
+<body>
+	<p>root font size: <input id="fs" type="number" value="16" /> <!-- device pixel ratio: <input id="sl" value="2" type="number" />--> <span class="rem2px"></span> <button class="set">set</button></p>
+	<p>screen width: <input id="sw" value="375" type="number"/></p>
+	<p>design drawing width: <input id="dw" value="750" type="number"/></p>
+	<p>size from design drawing: <input id="dr" type="number" /> <span class="result"></span></p>
+	<hr/>
+	<p>another screen width: <input id="adw" type="number"/> <!--another device pixel ratio: <input id="asl" value="2" type="number" />--> <span class="afs"></span> <button class="calc">calc</button></p>
+	<code style="font-size: 14px;">
+		document.getElementsByTagName("html")[0].style.fontSize = 1 / (0.0625 * (375/document.documentElement.clientWidth)) + 'px';<br/>
+		document.getElementsByTagName("html")[0].style.fontSize = ((16 * document.documentElement.clientWidth) / 375) + 'px';
+	</code>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script>
+		~function() {
+			var fs = $("#fs");
+			var dr = $("#dr");
+			var sw = $("#sw");
+			var dw = $("#dw");
+			var info = $(".rem2px");
+			var result = $(".result");
+			var sbtn = $(".set");
+
+			var adw = $("#adw");
+			var afs = $(".afs");
+			var calc = $(".calc");
+
+			var px2rem = 0;
+
+			function isNumber(v) { return /^(\d+\.)?\d+$/.test(v) }
+			sbtn.click(function() {
+				var a = fs.val(); // root font size
+				var c = sw.val(); // screen width
+				var d = dw.val(); // design drawing width
+				if (a && isNumber(a)) {
+					px2rem = (c / d) * (1 / a);
+					info.html("design drawing 1px = " + px2rem + "rem");
+				}
+			});
+			dr.on("click", function() {
+				this.select();
+			});
+			dr.on("input", function() {
+				if (px2rem === 0) return;
+				var a = this.value;
+				if (a > 0) {
+					result.html('<b>' + Number((px2rem * a).toFixed(5)) + '</b>rem');
+				}
+			});
+			calc.click(function() {
+				if (px2rem === 0) return;
+				var a = adw.val();
+				var b = sw.val();
+				var c = fs.val(); // root font size
+				var f;
+				f = Number((c * a) / b).toFixed(5);
+				afs.html("(" + c + " * " + a + ") / " + b + " font-size: <b>" + Number(f) + "px</b>");
+			});
+		}();
+	</script>
+</body>
+</html>

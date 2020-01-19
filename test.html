@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input id="a" />
+	<script>
+		document.getElementById("a").addEventListener("input", function() {
+			this.value = /^((\d+)|(\d+\.)|(\d+\.\d))$/.test(this.value) && (/^((\d+)|(\d+\.\d))$/.test(this.value) && parseFloat(this.value) || this.value) || "";
+		});
+	</script>
+</body>
+</html>

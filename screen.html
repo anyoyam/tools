@@ -1,0 +1,14 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,viewport-fit=cover" />
+</head>
+<body>
+	<div id="result"></div>
+	<script>
+		var a = document.getElementById('result');
+		a.innerHTML = document.body.clientWidth + " x " + document.body.clientHeight 
+			+ "<br/> pixel ratio:" + devicePixelRatio
+			+ "<br/> fontsize:" + document.getElementsByTagName('html')[0].style.fontSize;
+	</script>
+</body>
+</html>

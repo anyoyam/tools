@@ -11,7 +11,7 @@
 			border-bottom: 2px solid #ccc;
 			outline: 0;
 		}
-		.result {
+		.result, .rtpres {
 			color: green;
 		}
 	</style>
@@ -21,6 +21,8 @@
 	<p>screen width: <input id="sw" value="375" type="number"/></p>
 	<p>design drawing width: <input id="dw" value="750" type="number"/></p>
 	<p>size from design drawing: <input id="dr" type="number" /> <span class="result"></span></p>
+	<hr/>
+	<p>rem to px: <input id="rdr" /> <span class="rtpres"></span></p>
 	<hr/>
 	<p>another screen width: <input id="adw" type="number"/> <!--another device pixel ratio: <input id="asl" value="2" type="number" />--> <span class="afs"></span> <button class="calc">calc</button></p>
 	<code style="font-size: 14px;">
@@ -32,10 +34,13 @@
 		~function() {
 			var fs = $("#fs");
 			var dr = $("#dr");
+			var rdr = $("#rdr");
+
 			var sw = $("#sw");
 			var dw = $("#dw");
 			var info = $(".rem2px");
 			var result = $(".result");
+			var rtpres = $(".rtpres");
 			var sbtn = $(".set");
 
 			var adw = $("#adw");
@@ -62,6 +67,16 @@
 				var a = this.value;
 				if (a > 0) {
 					result.html('<b>' + Number((px2rem * a).toFixed(5)) + '</b>rem');
+				}
+			});
+			rdr.on("click", function() {
+				this.select();
+			});
+			rdr.on("input", function() {
+				if (px2rem === 0) return;
+				var a = this.value;
+				if (a > 0) {
+					rtpres.html('<b>' + Number((a / px2rem).toFixed(5)) + '</b>px');
 				}
 			});
 			calc.click(function() {

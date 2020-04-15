@@ -28,8 +28,8 @@
 	<code style="font-size: 14px;">
 		document.getElementsByTagName("html")[0].style.fontSize = 1 / (0.0625 * (375/document.documentElement.clientWidth)) + 'px';<br/>
 		document.getElementsByTagName("html")[0].style.fontSize = ((16 * document.documentElement.clientWidth) / 375) + 'px';<br/><br/><br/>
-		<p>design drawing 1px = page 0.01rem </p>
-		document.getElementsByTagName("html")[0].style.fontSize = (100 * document.documentElement.clientWidth / 375) + 'px';
+		<p>design drawing 1px = page 0.01rem (750 is design drawing width)</p>
+		document.getElementsByTagName("html")[0].style.fontSize = (100 * (document.documentElement.clientWidth / 750)) + 'px';
 	</code>
 	<script src="jquery-3.4.1.min.js"></script>
 	<script>
